@@ -1,0 +1,22 @@
+main .user-body {
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+}
+
+main .user-body img {
+    position: absolute;
+    left: 50rem;
+    bottom: 0.3rem;
+}
+
+main .user-body ul {
+    padding-inline-start: 2rem;
+}
+
+main .user-name {
+    font-size: 30px;
+}
+
+main
