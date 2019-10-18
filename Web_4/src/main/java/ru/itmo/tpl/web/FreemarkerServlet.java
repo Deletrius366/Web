@@ -48,11 +48,17 @@ public class FreemarkerServlet extends HttpServlet {
 
         Template template;
         try {
-            template = freemarkerConfiguration.getTemplate(
-                    URLDecoder.decode(request.getRequestURI(), StandardCharsets.UTF_8.name()) + ".ftlh");
+            if (request.getRequestURI().equals("/") || request.getRequestURI().equals("") ) {
+                template = freemarkerConfiguration.getTemplate(
+                        URLDecoder.decode("/index", StandardCharsets.UTF_8.name()) + ".ftlh");
+            } else {
+                template = freemarkerConfiguration.getTemplate(
+                        URLDecoder.decode(request.getRequestURI(), StandardCharsets.UTF_8.name()) + ".ftlh");
+            }
         } catch (TemplateNotFoundException ignored) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            template = freemarkerConfiguration.getTemplate(
+                    URLDecoder.decode("/notFound", StandardCharsets.UTF_8.name()) + ".ftlh");
+            //response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
 
         response.setContentType("text/html");
@@ -68,6 +74,10 @@ public class FreemarkerServlet extends HttpServlet {
     }
 
     private void putData(HttpServletRequest request, Map<String, Object> data) {
+        if (request.getRequestURI().endsWith("help"))
+            data.put("pointHelp", true);
+        if (request.getRequestURI().endsWith("index"))
+            data.put("pointIndex", true);
         for (Map.Entry<String, String[]> e : request.getParameterMap().entrySet()) {
             if (e.getValue() != null && e.getValue().length == 1) {
                 System.out.println(e.getKey());

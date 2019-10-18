@@ -58,6 +58,10 @@ header nav ul {
     padding: 0;
 }
 
+header .underlined {
+    border-bottom: 3px solid var(--caption-color);
+}
+
 header nav ul li {
     display: inline;
     margin-left: 1rem;

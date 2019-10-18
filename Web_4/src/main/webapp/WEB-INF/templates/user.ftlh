@@ -6,8 +6,10 @@
     <link rel="stylesheet" type="text/css" href="/css/user.css">
     <#if handle??>
         <#assign viewedUser=c.findBy(users, "handle", handle)!/>
+        <#assign index=c.findIndex(users, "handle", handle)/>
     <#elseif id??>
         <#assign viewedUser=c.findBy(users, "id", id)!/>
+        <#assign index=c.findIndex(users, "id", id)/>
     </#if>
 
     <#if viewedUser.id??>
@@ -24,7 +26,6 @@
                 </ul>
             </div>
             <div class="user-footer">
-                <#assign index=c.findIndex(users, "handle", handle)/>
                 <#if viewedUser != users?first>
                     <a href="/user?handle=${users[index-1].handle}">&lAarr;</a>
                 <#else>

@@ -18,8 +18,16 @@
     </div>
     <nav>
         <ul>
-            <li><a href="/index">Index</a></li>
-            <li><a href="/misc/help">Help</a></li>
+            <#if pointIndex??>
+                <li class="underlined"><a href="/index">Index</a></li>
+            <#else>
+                <li><a href="/index">Index</a></li>
+            </#if>
+            <#if pointHelp??>
+                <li class="underlined"><a href="/misc/help">Help</a></li>
+            <#else>
+                <li><a href="/misc/help">Help</a></li>
+            </#if>
         </ul>
     </nav>
 </header>
