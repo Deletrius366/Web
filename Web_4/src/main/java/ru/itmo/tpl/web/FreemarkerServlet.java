@@ -82,6 +82,7 @@ public class FreemarkerServlet extends HttpServlet {
             if (e.getValue() != null && e.getValue().length == 1) {
                 System.out.println(e.getKey());
                 System.out.println(e.getValue()[0]);
+                //if (e.getKey().equals("id"))
                 if (e.getKey().endsWith("id"))
                     data.put(e.getKey(), Long.parseLong(e.getValue()[0]));
                 else

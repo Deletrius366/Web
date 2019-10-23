@@ -131,3 +131,21 @@ aside section .footer a {
 aside section .footer a:after {
     content: " →";
 }
+
+.RED {
+    color: red;
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+.BLUE {
+    color: blue;
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+.GREEN {
+    color: green;
+    text-decoration: none;
+    font-weight: bolder;
+}

@@ -4,11 +4,13 @@ public class User {
     private final long id;
     private final String handle;
     private final String name;
+    private final Colors color;
 
-    public User(long id, String handle, String name) {
+    public User(long id, String handle, String name, Colors color) {
         this.id = id;
         this.handle = handle;
         this.name = name;
+        this.color = color;
     }
 
     public long getId() {
@@ -17,6 +19,10 @@ public class User {
 
     public String getHandle() {
         return handle;
+    }
+
+    public Colors getColor() {
+        return color;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package ru.itmo.tpl.util;
 
+import ru.itmo.tpl.model.Colors;
 import ru.itmo.tpl.model.User;
 
 import java.util.Arrays;
@@ -8,12 +9,12 @@ import java.util.Map;
 
 public class DataUtil {
     private static final List<User> USERS = Arrays.asList(
-            new User(1, "MikeMirayanov", "Mikhail Mirzayanov"),
-            new User(2, "tourist", "Genady Korotkevich"),
-            new User(3, "emusk", "Elon Musk"),
-            new User(5, "pashka", "Pavel Mavrin"),
-            new User(7, "geranazavr555", "Georgiy Nazarov"),
-            new User(11, "cannon147", "Erofey Bashunov")
+            new User(1, "MikeMirayanov", "Mikhail Mirzayanov", Colors.RED),
+            new User(2, "tourist", "Genady Korotkevich", Colors.GREEN),
+            new User(3, "emusk", "Elon Musk", Colors.BLUE),
+            new User(5, "pashka", "Pavel Mavrin", Colors.RED),
+            new User(7, "geranazavr555", "Georgiy Nazarov", Colors.GREEN),
+            new User(11, "cannon147", "Erofey Bashunov", Colors.BLUE)
     );
 
     private static List<User> getUsers() {

@@ -81,7 +81,7 @@
 </#macro>
 
 <#macro userlink user>
-    <a href="/user?handle=${user.handle}">${user.name}</a>
+    <a class="${user.color}" href="/user?handle=${user.handle}">${user.handle}</a>
 </#macro>
 
 <#function findBy items key id>
