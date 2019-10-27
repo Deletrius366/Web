@@ -1,0 +1,8 @@
+main ul {
+}
+
+main ul li {
+    list-style-type: none;
+    margin-right: 3rem;
+    padding-bottom: 2rem;
+}

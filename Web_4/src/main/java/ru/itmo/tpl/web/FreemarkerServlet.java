@@ -46,24 +46,28 @@ public class FreemarkerServlet extends HttpServlet {
         request.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-        Template template;
-        try {
-            if (request.getRequestURI().equals("/") || request.getRequestURI().equals("") ) {
-                template = freemarkerConfiguration.getTemplate(
-                        URLDecoder.decode("/index", StandardCharsets.UTF_8.name()) + ".ftlh");
-            } else {
-                template = freemarkerConfiguration.getTemplate(
-                        URLDecoder.decode(request.getRequestURI(), StandardCharsets.UTF_8.name()) + ".ftlh");
-            }
-        } catch (TemplateNotFoundException ignored) {
-            template = freemarkerConfiguration.getTemplate(
-                    URLDecoder.decode("/notFound", StandardCharsets.UTF_8.name()) + ".ftlh");
-            //response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        }
-
         response.setContentType("text/html");
         Map<String, Object> data = new HashMap<>();
-        putData(request, data);
+        boolean wrongParameter = putData(request, data);
+        Template template;
+        if (!wrongParameter) {
+            template = freemarkerConfiguration.getTemplate(
+                    URLDecoder.decode("/notFound", StandardCharsets.UTF_8.name()) + ".ftlh");
+        } else {
+            try {
+                if (request.getRequestURI().endsWith("/") || request.getRequestURI().equals("")) {
+                    template = freemarkerConfiguration.getTemplate(
+                            URLDecoder.decode("/index", StandardCharsets.UTF_8.name()) + ".ftlh");
+                } else {
+                    template = freemarkerConfiguration.getTemplate(
+                            URLDecoder.decode(request.getRequestURI(), StandardCharsets.UTF_8.name()) + ".ftlh");
+                }
+            } catch (TemplateNotFoundException ignored) {
+                template = freemarkerConfiguration.getTemplate(
+                        URLDecoder.decode("/notFound", StandardCharsets.UTF_8.name()) + ".ftlh");
+                //response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+        }
 
         try {
             template.process(data, response.getWriter());
@@ -73,23 +77,31 @@ public class FreemarkerServlet extends HttpServlet {
         }
     }
 
-    private void putData(HttpServletRequest request, Map<String, Object> data) {
+    private boolean putData(HttpServletRequest request, Map<String, Object> data) {
         if (request.getRequestURI().endsWith("help"))
             data.put("pointHelp", true);
         if (request.getRequestURI().endsWith("index"))
             data.put("pointIndex", true);
+        if (request.getRequestURI().endsWith("users"))
+            data.put("pointUsers", true);
         for (Map.Entry<String, String[]> e : request.getParameterMap().entrySet()) {
             if (e.getValue() != null && e.getValue().length == 1) {
                 System.out.println(e.getKey());
                 System.out.println(e.getValue()[0]);
                 //if (e.getKey().equals("id"))
                 if (e.getKey().endsWith("id"))
-                    data.put(e.getKey(), Long.parseLong(e.getValue()[0]));
+                    try {
+                        data.put(e.getKey(), Long.parseLong(e.getValue()[0]));
+                    } catch (NumberFormatException ignored) {
+                        DataUtil.putData(data);
+                        return false;
+                    }
                 else
                     data.put(e.getKey(), e.getValue()[0]);
             }
         }
 
         DataUtil.putData(data);
+        return true;
     }
 }

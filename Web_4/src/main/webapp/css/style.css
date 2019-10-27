@@ -96,10 +96,17 @@ footer {
     text-align: center;
 }
 
+.sidebar {
+    float: right;
+    display: flex;
+    flex-direction: column;
+}
+
 aside section {
     border: 1px solid var(--border-color);
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
+    margin-bottom: 1rem;
 }
 
 aside section .header {
@@ -109,13 +116,18 @@ aside section .header {
     color: var(--caption-color);
 }
 
+aside section .title {
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+}
+
 aside section .header:before {
     content: "→";
 }
 
-aside section .body {
-    padding: 1rem;
-}
+/*aside section .body {*/
+    /*padding: 1rem;*/
+/*}*/
 
 aside section .footer {
     border-top: 1px solid var(--border-color);

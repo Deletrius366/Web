@@ -1,0 +1,38 @@
+.datatable {
+    width: 80%;
+}
+
+.datatable .caption {
+    padding: 3px;
+    background-color: lightgrey;
+    border-radius: 5px 5px 0 0;
+}
+
+.datatable table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.datatable table thead {
+    border: 1px solid var(--border-color);
+}
+
+.datatable table tr {
+    border: 1px solid var(--border-color);
+}
+
+.datatable table tbody tr:nth-child(odd) {
+    background: whitesmoke;
+}
+
+.datatable table th {
+    border: 1px solid var(--border-color);
+    padding: 4px;
+}
+
+.datatable table td {
+    border: 1px solid var(--border-color);
+    padding: 4px;
+    text-align: center;
+}

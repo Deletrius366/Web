@@ -10,6 +10,9 @@
     <#elseif id??>
         <#assign viewedUser=c.findBy(users, "id", id)!/>
         <#assign index=c.findIndex(users, "id", id)/>
+    <#else>
+        <#assign viewedUser=c.findBy(users, "id", logged_user_id)!/>
+        <#assign index=c.findIndex(users, "id", logged_user_id)/>
     </#if>
 
     <#if viewedUser.id??>
@@ -23,6 +26,9 @@
                     <li>id: ${viewedUser.id}</li>
                     <li>handle: ${viewedUser.handle}</li>
                     <li>name: ${viewedUser.name}</li>
+                    <li>
+                        <a href="/posts?user_id=${viewedUser.id}">posts</a>
+                    </li>
                 </ul>
             </div>
             <div class="user-footer">

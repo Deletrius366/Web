@@ -26,6 +26,9 @@
                     <li>id: ${viewedUser.id}</li>
                     <li>handle: ${viewedUser.handle}</li>
                     <li>name: ${viewedUser.name}</li>
+                    <li>
+                        <a href="/posts?user_id=${viewedUser.id}">posts</a>
+                    </li>
                 </ul>
             </div>
             <div class="user-footer">
