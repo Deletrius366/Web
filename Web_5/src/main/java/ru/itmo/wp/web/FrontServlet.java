@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import freemarker.template.*;
 import ru.itmo.wp.model.domain.User;
 import ru.itmo.wp.model.exception.ValidationException;
+import ru.itmo.wp.model.service.UserService;
 import ru.itmo.wp.web.exception.NotFoundException;
 import ru.itmo.wp.web.exception.RedirectException;
 import ru.itmo.wp.web.page.IndexPage;
@@ -122,14 +123,37 @@ public class FrontServlet extends HttpServlet {
             throw new NotFoundException();
         }
 
+        Method beforeMethod = null;
+        for (Class<?> clazz = pageClass; beforeMethod == null && clazz != null; clazz = clazz.getSuperclass()) {
+            try {
+                beforeMethod = clazz.getDeclaredMethod("before", HttpServletRequest.class, Map.class);
+            } catch (NoSuchMethodException ignored) {
+                // No operations.
+            }
+        }
+
+        if (beforeMethod == null)
+            throw new NotFoundException();
+
+        Method afterMethod = null;
+        for (Class<?> clazz = pageClass; afterMethod == null && clazz != null; clazz = clazz.getSuperclass()) {
+            try {
+                afterMethod = clazz.getDeclaredMethod("after", HttpServletRequest.class, Map.class);
+            } catch (NoSuchMethodException ignored) {
+                // No operations.
+            }
+        }
+
+        if (afterMethod == null) {
+            throw new NotFoundException();
+        }
+
         Method method = null;
         Method[] methods = null;
         Class<?>[] arguments = null;
         for (Class<?> clazz = pageClass; method == null && clazz != null; clazz = clazz.getSuperclass()) {
             try {
                 methods = pageClass.getDeclaredMethods();
-//                method = pageClass.getDeclaredMethod(route.getAction());
-//                arguments = method.getParameterTypes();
                 for (Method m : methods) {
                     if (m.getName().equals(route.getAction())) {
                         arguments = m.getParameterTypes();
@@ -139,7 +163,6 @@ public class FrontServlet extends HttpServlet {
                 if (method == null) {
                     throw new NoSuchMethodException();
                 }
-                // method = pageClass.getDeclaredMethod(route.getAction(), HttpServletRequest.class, Map.class);
             } catch (NoSuchMethodException ignored) {
                 // No operations.
             }
@@ -158,9 +181,10 @@ public class FrontServlet extends HttpServlet {
         }
 
         Map<String, Object> view = new HashMap<>();
-        putUser(request, view);
+        // putUser(request, view);
 
         try {
+            beforeMethod.setAccessible(true);
             method.setAccessible(true);
             Object[] args = new Object[arguments.length];
             for (int i = 0; i < arguments.length; i++) {
@@ -171,7 +195,9 @@ public class FrontServlet extends HttpServlet {
                     args[i] = request;
                 }
             }
+            beforeMethod.invoke(page, request, view);
             method.invoke(page, args);
+            afterMethod.invoke(page, request, view);
         } catch (IllegalAccessException e) {
             throw new ServletException("Unable to run action [pageClass=" + pageClass + ", method=" + method + "].", e);
         } catch (InvocationTargetException e) {
@@ -207,12 +233,12 @@ public class FrontServlet extends HttpServlet {
         }
     }
 
-    private void putUser(HttpServletRequest request, Map<String, Object> view) {
-        User user = (User) request.getSession().getAttribute("user");
-        if (user != null) {
-            view.put("user", user);
-        }
-    }
+//    private void putUser(HttpServletRequest request, Map<String, Object> view) {
+//        User user = (User) request.getSession().getAttribute("user");
+//        if (user != null) {
+//            view.put("user", user);
+//        }
+//    }
 
     private static final class Route {
         private static final String DEFAULT_ACTION = "action";

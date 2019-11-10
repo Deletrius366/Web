@@ -71,6 +71,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User findById(long userId) {
+        return userRepository.findById(userId);
+    }
+
     public User validateAndFindByLoginOrEmailAndPassword(String loginOrEmail, String password) throws ValidationException {
         User user = userRepository.findByLoginAndPasswordSha(loginOrEmail, getPasswordSha(password));
         if (user == null)

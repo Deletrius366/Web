@@ -9,7 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /** @noinspection unused*/
-public class RegisterPage {
+public class RegisterPage extends Page {
+
+    public void before(HttpServletRequest request, Map<String, Object> view) {
+        super.before(request, view);
+    }
+
     private final UserService userService = new UserService();
 
     private void action() {

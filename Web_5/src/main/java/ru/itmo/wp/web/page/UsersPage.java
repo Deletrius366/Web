@@ -9,8 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /** @noinspection unused*/
-public class UsersPage {
+public class UsersPage extends Page {
+
     private final UserService userService = new UserService();
+
+    public void before(HttpServletRequest request, Map<String, Object> view) {
+        super.before(request, view);
+    }
 
     private void action(Map<String, Object> view) {
         view.put("users", userService.findAll());
