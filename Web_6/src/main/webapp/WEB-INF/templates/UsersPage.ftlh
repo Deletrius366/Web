@@ -9,6 +9,7 @@
             <tr>
                 <th>Id</th>
                 <th>Login</th>
+                <th>Admin</th>
             </tr>
             </thead>
             <tbody>
@@ -16,6 +17,13 @@
                 <tr>
                     <td class="user_id"></td>
                     <td class="user_login"></td>
+                    <td>
+                        <form method="post" action="">
+                            <div class="user_admin"></div>
+                            <input type="submit">
+                            <#--<input type="submit" value class="value">-->
+                        </form>
+                    </td>
                 </tr>
             </template>
             <tr class="noData">
@@ -36,21 +44,45 @@
                 data: {
                     action: "findAll"
                 },
-                success: function(response) {
-                    response["users"].forEach(function(user) {
+                success: function (response) {
+                    response["users"].forEach(function (user) {
                         $noData.hide();
                         var $tr = $($(".users template").prop("content")).clone();
                         $tr.find(".user_id").text(user["id"]);
                         $tr.find(".user_login").text(user["login"]);
-                        //$tr.find("tr").attr("data-userId", user["id"]);
+                        $tr.find(".user_admin").text(user["admin"]);
+                        $tr.find("input[type='submit']").val(user["admin"] ? "Disable" : "Enable");
                         $(".users tbody").append($tr);
+                        if (!response["admin"]) {
+                            $('td:nth-child(3),th:nth-child(3)').hide();
+                        }
                     });
-                    $(".users tr").click(function() {
+                    $(".users form").submit(function () {
+                        var userId = $(this).find("input[type='submit']").closest("tr").find("td")[0].innerHTML;
+                        var curNode = this;
+                        myAjax({
+                            data: {
+                                action: "changeAdmin",
+                                id: userId
+                            },
+                            success: function () {
+                                if (!response["error"]) {
+                                    alert("error");
+                                    $(curNode).find("input[type='submit']").val($(curNode).find("input[type='submit']").val() === "Disable" ? "Enable" : "Disable");
+                                    $(curNode).find(".user_admin").text($(curNode).find("input[type='submit']").val() === "Disable" ? "true" : "false");
+                                }
+                            }
+                        });
+                        // $(this).find("input[type='submit']").val($(this).find("input[type='submit']").val() === "Disable" ? "Enable" : "Disable");
+                        // $(this).find(".user_admin").text($(this).find("input[type='submit']").val() === "Disable" ? "true" : "false");
+                        return false;
+                    });
+                    $(".users tr").click(function () {
                         //alert("tr");
                         myAjax({
                             data: {
                                 action: "findUser"
-                             //   userId: $(this).attr("data-userId")
+                                //   userId: $(this).attr("data-userId")
                             },
                             success: function (response) {
                                 notify(response["user"].creationTime);

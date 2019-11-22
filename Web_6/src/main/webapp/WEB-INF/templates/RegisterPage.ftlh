@@ -43,9 +43,6 @@
                 var $error = $(this).find(".error");
 
                 myAjax({
-                    type: "POST",
-                    url: "",
-                    dataType: "json",
                     data: {
                         action: "register",
                         login: login,

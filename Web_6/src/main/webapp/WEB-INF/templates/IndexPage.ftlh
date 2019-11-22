@@ -47,13 +47,15 @@
                 },
                 success: function (response) {
                     response["articles"].forEach(function (article) {
-                        $noData.hide();
-                        // $noData.hide();
-                        var $tr = $($(".articles template").prop("content")).clone();
-                        $tr.find(".title").text(article["title"]);
-                        $tr.find(".text").text(article["text"]);
-                        //$tr.find("div").attr("data-articleId", user["id"]);
-                        $(".articles").append($tr);
+                        if (!article["hidden"]) {
+                            $noData.hide();
+                            // $noData.hide();
+                            var $tr = $($(".articles template").prop("content")).clone();
+                            $tr.find(".title").text(article["title"]);
+                            $tr.find(".text").text(article["text"]);
+                            //$tr.find("div").attr("data-articleId", user["id"]);
+                            $(".articles").append($tr);
+                        }
                     });
                 }
             });

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ArticleRepository {
     void save(Article article);
+    void changeHidden(long articleId);
     List<Article> findAll();
     Article find(long id);
 }

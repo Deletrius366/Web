@@ -22,6 +22,7 @@ public class ArticlePage {
         article.setUserId(user.getId());
         article.setTitle(request.getParameter("title"));
         article.setText(request.getParameter("text"));
+        article.setHidden(false);
 
         articleService.validateArticle(article);
         articleService.createArticle(article);

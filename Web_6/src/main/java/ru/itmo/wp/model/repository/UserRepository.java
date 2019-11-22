@@ -10,4 +10,5 @@ public interface UserRepository {
     User findByLoginAndPasswordSha(String login, String passwordSha);
     List<User> findAll();
     void save(User user, String passwordSha);
+    void changeHidden(long id);
 }

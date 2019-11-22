@@ -56,6 +56,8 @@ public class UserService {
         return userRepository.find(id);
     }
 
+    public void changeAdmin(long id) {userRepository.changeHidden(id);}
+
     public User validateAndFindByLoginAndPassword(String login, String password) throws ValidationException {
         User user = userRepository.findByLoginAndPasswordSha(login, getPasswordSha(password));
         if (user == null) {

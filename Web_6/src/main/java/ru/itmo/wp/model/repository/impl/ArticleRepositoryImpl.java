@@ -33,6 +33,9 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 case "text":
                     article.setText(resultSet.getString(i));
                     break;
+                case "hidden":
+                    article.setHidden(resultSet.getBoolean(i));
+                    break;
                 case "creationTime":
                     article.setCreationTime(resultSet.getTimestamp(i));
                     break;
@@ -60,10 +63,11 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     @Override
     public void save(Article article) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `Article` (`userId`, `title`, `text`, `creationTime`) VALUES (?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `Article` (`userId`, `title`, `text`, `hidden`, `creationTime`) VALUES (?, ?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
                 statement.setLong(1, article.getUserId());
                 statement.setString(2, article.getTitle());
                 statement.setString(3, article.getText());
+                statement.setBoolean(4, article.isHidden());
                 if (statement.executeUpdate() != 1) {
                     throw new RepositoryException("Can't save Article.");
                 } else {
@@ -78,6 +82,22 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             }
         } catch (SQLException e) {
             throw new RepositoryException("Can't save Article.", e);
+        }
+    }
+
+    @Override
+    public void changeHidden(long articleId) {
+        Article article = find(articleId);
+        try (Connection connection = DATA_SOURCE.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Article SET hidden=? WHERE id=?")) {
+                statement.setBoolean(1, !article.isHidden());
+                statement.setLong(2, articleId);
+                if (statement.executeUpdate() != 1) {
+                    throw new RepositoryException("Can't update Article.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException("Can't update Article.", e);
         }
     }
 

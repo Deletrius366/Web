@@ -88,6 +88,9 @@ public class UserRepositoryImpl implements UserRepository {
                 case "login":
                     user.setLogin(resultSet.getString(i));
                     break;
+                case "admin":
+                    user.setAdmin(resultSet.getBoolean(i));
+                    break;
                 case "creationTime":
                     user.setCreationTime(resultSet.getTimestamp(i));
                     break;
@@ -102,9 +105,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void save(User user, String passwordSha) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `User` (`login`, `passwordSha`, `creationTime`) VALUES (?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `User` (`login`,  `passwordSha`, `admin`, `creationTime`) VALUES (?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getLogin());
                 statement.setString(2, passwordSha);
+                statement.setBoolean(3, false);
                 if (statement.executeUpdate() != 1) {
                     throw new RepositoryException("Can't save User.");
                 } else {
@@ -119,6 +123,22 @@ public class UserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException e) {
             throw new RepositoryException("Can't save User.", e);
+        }
+    }
+
+    @Override
+    public void changeHidden(long id) {
+        User user = find(id);
+        try (Connection connection = DATA_SOURCE.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE User SET admin=? WHERE id=?")) {
+                statement.setBoolean(1, !user.isAdmin());
+                statement.setLong(2, user.getId());
+                if (statement.executeUpdate() != 1) {
+                    throw new RepositoryException("Can't update User.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException("Can't update User.", e);
         }
     }
 }

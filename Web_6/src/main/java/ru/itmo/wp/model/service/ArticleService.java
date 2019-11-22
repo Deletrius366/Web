@@ -16,6 +16,7 @@ public class ArticleService {
     }
     public List<Article> findAll() {return articleRepository.findAll();}
     public Article find(long id) {return articleRepository.find(id);}
+    public void changeHidden(long articleId) {articleRepository.changeHidden(articleId);}
 
     public void validateArticle(Article article) throws ValidationException {
         if (Strings.isNullOrEmpty(article.getTitle())) {

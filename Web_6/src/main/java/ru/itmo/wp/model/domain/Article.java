@@ -8,7 +8,16 @@ public class Article implements Serializable {
     private long userId;
     private String title;
     private String text;
+    private boolean hidden;
     private Date creationTime;
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
 
     public void setId(long id) {
         this.id = id;
