@@ -46,15 +46,20 @@
         $(function () {
             $(".articles form").submit(function () {
                 var articleId = $(this).find("input[type='submit']").closest("tr").find("td")[0].innerHTML;
+                var curNode = this;
                 myAjax({
                     data: {
                         action: "changeHidden",
                         articleId: articleId
                     },
-                    success: function () {
+                    success: function (response) {
+                        if (!response["error"]) {
+                            $(curNode).find("input[type='submit']").val($(curNode).find("input[type='submit']").val() === "Hide" ? "Show" : "Hide");
+                        } else {
+                            notify(response["message"]);
+                        }
                     }
                 });
-                $(this).find("input[type='submit']").val($(this).find("input[type='submit']").val() === "Hide" ? "Show" : "Hide");
                 return false;
             });
         })

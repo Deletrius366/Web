@@ -48,9 +48,13 @@
                     response["users"].forEach(function (user) {
                         $noData.hide();
                         var $tr = $($(".users template").prop("content")).clone();
+                        $tr.find("tr").attr("data-userId", user["id"]);
                         $tr.find(".user_id").text(user["id"]);
+                        $tr.find(".user_id").attr("data-userId", user["id"]);
                         $tr.find(".user_login").text(user["login"]);
+                        $tr.find(".user_login").attr("data-userId", user["id"]);
                         $tr.find(".user_admin").text(user["admin"]);
+                        $tr.find(".user_admin").attr("data-userId", user["id"]);
                         $tr.find("input[type='submit']").val(user["admin"] ? "Disable" : "Enable");
                         $(".users tbody").append($tr);
                         if (!response["admin"]) {
@@ -65,11 +69,13 @@
                                 action: "changeAdmin",
                                 id: userId
                             },
-                            success: function () {
+                            success: function (response) {
+                                // alert(response["error"]);
                                 if (!response["error"]) {
-                                    alert("error");
                                     $(curNode).find("input[type='submit']").val($(curNode).find("input[type='submit']").val() === "Disable" ? "Enable" : "Disable");
                                     $(curNode).find(".user_admin").text($(curNode).find("input[type='submit']").val() === "Disable" ? "true" : "false");
+                                } else {
+                                    notify(response["message"]);
                                 }
                             }
                         });
@@ -81,8 +87,8 @@
                         //alert("tr");
                         myAjax({
                             data: {
-                                action: "findUser"
-                                //   userId: $(this).attr("data-userId")
+                                action: "findUser",
+                                userId: $(this).attr("data-userId")
                             },
                             success: function (response) {
                                 notify(response["user"].creationTime);

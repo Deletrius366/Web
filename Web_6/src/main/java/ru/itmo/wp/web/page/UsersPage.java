@@ -32,8 +32,10 @@ public class UsersPage {
             User user = userService.find(Long.parseLong(request.getParameter("id")));
         } catch (Exception e) {
             view.put("error", true);
+            view.put("message", "Invalid user id");
             throw new RedirectException("/users");
         }
         userService.changeAdmin(Long.parseLong(request.getParameter("id")));
+        throw new RedirectException("/users");
     }
 }
