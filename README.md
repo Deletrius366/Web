@@ -1,1 +1,1 @@
-Web technologies demonstarted via codeforces.com prototype
+Web technologies demonstrated via codeforces.com prototype
